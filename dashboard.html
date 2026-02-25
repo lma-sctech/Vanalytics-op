@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
@@ -1284,7 +1284,7 @@
       const cmdEl = document.getElementById('exec-commandes');
       const cmdDesc = document.getElementById('exec-commandes-desc');
       if (cmdEl) cmdEl.innerHTML = `${fmt.num(k.total_commandes || 0)} cmd ${buildPill(cmdLevel, cmdLabel)}`;
-      if (cmdDesc) cmdDesc.textContent = `Annulation: ${fmt.num(ann)}% | Expedition: ${fmt.num(shipRate)}%. Recommendation: renforcer controle si annulation > 6%.`;
+      if (cmdDesc) cmdDesc.textContent = `Annulation: ${fmt.num(ann)}% | Expedition: ${fmt.num(shipRate)}%.`;
 
       const topSlice = [...(t.tranches_poids || [])].sort((x, y) => (y.pct || 0) - (x.pct || 0))[0] || {};
       const trLevel = (topSlice.pct || 0) >= 55 ? 'warn' : 'good';
@@ -1292,7 +1292,7 @@
       const trEl = document.getElementById('exec-transport');
       const trDesc = document.getElementById('exec-transport-desc');
       if (trEl) trEl.innerHTML = `${fmt.num(k.nb_expeditions_total || 0)} exp ${buildPill(trLevel, trLabel)}`;
-      if (trDesc) trDesc.textContent = `Tranche dominante: ${topSlice.tranche || '-'} (${fmt.num(topSlice.pct || 0)}%). Recommendation: verifier adequation offre transport.`;
+      if (trDesc) trDesc.textContent = `Tranche dominante: ${topSlice.tranche || '-'} (${fmt.num(topSlice.pct || 0)}%).`;
 
       const morts = (a.morts || []).length;
       const dormants = (a.dormants || []).length;
@@ -1302,7 +1302,7 @@
       const arDesc = document.getElementById('exec-articles-desc');
       const nbRefsArt = (a && a.meta && a.meta.nb_references) ? a.meta.nb_references : 0;
       if (arEl) arEl.innerHTML = `${fmt.num(nbRefsArt)} refs ${buildPill(artLevel, artLabel)}`;
-      if (arDesc) arDesc.textContent = `Dormants: ${fmt.num(dormants)} | Morts: ${fmt.num(morts)}. Recommendation: lancer plan de relance/de-stockage cible.`;
+      if (arDesc) arDesc.textContent = `Dormants: ${fmt.num(dormants)} | Morts: ${fmt.num(morts)}.`;
     }
 
     function renderInsights(data) {
@@ -1317,9 +1317,9 @@
         const topMoisAnn = [...mensuel].sort((a,b)=>(b.taux_annulation||0)-(a.taux_annulation||0))[0];
         const shipRate = kpis.total_commandes ? ((kpis.nb_expeditions_total||0) / kpis.total_commandes * 100) : 0;
         iCmd.innerHTML = [
-          `<li>Pic de commandes: <strong>${topMoisCmd?.periode || '-'}</strong> (${fmt.num(topMoisCmd?.nb_commandes || 0)} commandes). Recommendation: preparer capacite equipe sur cette fenetre saisonniere.</li>`,
-          `<li>Risque annulation: <strong>${topMoisAnn?.periode || '-'}</strong> (${fmt.num(topMoisAnn?.taux_annulation || 0)}%). Recommendation: analyser causes (stock, delai, qualite) et plan correctif.</li>`,
-          `<li>Taux expedition global: <strong>${fmt.num(shipRate)}%</strong>. Recommendation: cibler >95% pour stabiliser l'execution.</li>`
+          `<li>Pic de commandes: <strong>${topMoisCmd?.periode || '-'}</strong> (${fmt.num(topMoisCmd?.nb_commandes || 0)} commandes).</li>`,
+          `<li>Risque annulation: <strong>${topMoisAnn?.periode || '-'}</strong> (${fmt.num(topMoisAnn?.taux_annulation || 0)}%).</li>`,
+          `<li>Taux expedition global: <strong>${fmt.num(shipRate)}%</strong>.</li>`
         ].join('');
       }
 
@@ -1329,9 +1329,9 @@
         const cp = [...(transport.top_cp || [])].sort((a,b)=>(b.nb_commandes||0)-(a.nb_commandes||0))[0];
         const expTop = [...(transport.expeditions_mensuelles || [])].sort((a,b)=>(b.nb_expeditions||0)-(a.nb_expeditions||0))[0];
         iTr.innerHTML = [
-          `<li>Tranche dominante: <strong>${tp?.tranche || '-'}</strong> (${fmt.num(tp?.pct || 0)}% des commandes). Recommendation: adapter packaging/transporteurs a cette charge majoritaire.</li>`,
-          `<li>Zone prioritaire: <strong>${cp?.cp || '-'} ${cp?.ville || ''}</strong> (${fmt.num(cp?.nb_commandes || 0)} commandes). Recommendation: renforcer pilotage local (SLA, cout, delai).</li>`,
-          `<li>Mois expedition max: <strong>${expTop?.mois_nom || '-'}</strong> (${fmt.num(expTop?.nb_expeditions || 0)} exp.). Recommendation: pre-reserver capacite sur les pics.</li>`
+          `<li>Tranche dominante: <strong>${tp?.tranche || '-'}</strong> (${fmt.num(tp?.pct || 0)}% des commandes).</li>`,
+          `<li>Zone prioritaire: <strong>${cp?.cp || '-'} ${cp?.ville || ''}</strong> (${fmt.num(cp?.nb_commandes || 0)} commandes).</li>`,
+          `<li>Mois expedition max: <strong>${expTop?.mois_nom || '-'}</strong> (${fmt.num(expTop?.nb_expeditions || 0)} exp.).</li>`
         ].join('');
       }
 
@@ -1340,9 +1340,9 @@
         const top = (articles.top_volume || [])[0] || {};
         const vol = (articles.volatils || [])[0] || {};
         iArt.innerHTML = [
-          `<li>Top reference: <strong>${top.productRef || '-'}</strong> ${top.designation ? `(${top.designation})` : ''} avec ${fmt.num(top.volume_unites || 0)} unites. Recommendation: proteger disponibilite et animation commerciale.</li>`,
-          `<li>Dormants: <strong>${fmt.num((articles.dormants || []).length)}</strong> | Morts: <strong>${fmt.num((articles.morts || []).length)}</strong>. Recommendation: activer plan relance, bundles et de-stockage.</li>`,
-          `<li>Volatilite a surveiller: <strong>${vol.productRef || '-'}</strong> (CV=${fmt.num(vol.cv_demande || 0)}). Recommendation: ajuster stock de securite et frequence de suivi.</li>`
+          `<li>Top reference: <strong>${top.productRef || '-'}</strong> ${top.designation ? `(${top.designation})` : ''} avec ${fmt.num(top.volume_unites || 0)} unites.</li>`,
+          `<li>Dormants: <strong>${fmt.num((articles.dormants || []).length)}</strong> | Morts: <strong>${fmt.num((articles.morts || []).length)}</strong>.</li>`,
+          `<li>Volatilite a surveiller: <strong>${vol.productRef || '-'}</strong> (CV=${fmt.num(vol.cv_demande || 0)}).</li>`
         ].join('');
       }
     }
